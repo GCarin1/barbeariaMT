@@ -1,0 +1,56 @@
+# Don Barbero - Rewrite Rules
+# Autor: Dante Testa (https://dantetesta.com.br) - 03/11/2025 15:34
+
+# Ativar rewrite engine
+RewriteEngine On
+
+# Forçar HTTPS em produção (comentar em local)
+# RewriteCond %{HTTPS} off
+# RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# Remover trailing slash
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_URI} (.+)/$
+RewriteRule ^ %1 [L,R=301]
+
+# Redirecionar tudo para index.php (front controller)
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^ index.php [QSA,L]
+
+# Segurança: Bloquear acesso a arquivos sensíveis
+<FilesMatch "\.(env|log|sql|md)$">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+# Segurança: Bloquear acesso a diretórios config
+<IfModule mod_rewrite.c>
+    RewriteRule ^config/.*$ - [F,L]
+    RewriteRule ^app/.*$ - [F,L]
+</IfModule>
+
+# Headers de segurança adicionais
+<IfModule mod_headers.c>
+    Header always set X-Frame-Options "DENY"
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set Referrer-Policy "no-referrer-when-downgrade"
+    Header always set Permissions-Policy "geolocation=(), microphone=(), camera=()"
+</IfModule>
+
+# Compressão GZIP para melhor performance
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css text/javascript application/javascript application/json
+</IfModule>
+
+# Cache de arquivos estáticos
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresByType image/jpg "access plus 1 year"
+    ExpiresByType image/jpeg "access plus 1 year"
+    ExpiresByType image/gif "access plus 1 year"
+    ExpiresByType image/png "access plus 1 year"
+    ExpiresByType image/svg+xml "access plus 1 year"
+    ExpiresByType text/css "access plus 1 month"
+    ExpiresByType application/javascript "access plus 1 month"
+</IfModule>

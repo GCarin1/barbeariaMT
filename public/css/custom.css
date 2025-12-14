@@ -1,0 +1,49 @@
+/**
+ * Don Barbero - CSS Customizado
+ * 
+ * @author Dante Testa <https://dantetesta.com.br>
+ * @created 03/11/2025 15:34
+ * @version 1.0.0
+ */
+
+/* Estilos customizados adicionais (se necessário) */
+/* O Tailwind CSS via CDN cobre a maior parte das necessidades */
+
+/* Smooth scroll */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Loading spinner customizado */
+.spinner-custom {
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top: 3px solid #fff;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Prevent layout shift */
+img, video {
+    max-width: 100%;
+    height: auto;
+}
+
+/* Focus visible para acessibilidade */
+*:focus-visible {
+    outline: 2px solid #3b82f6;
+    outline-offset: 2px;
+}
+
+/* Print styles */
+@media print {
+    nav, footer, .no-print {
+        display: none !important;
+    }
+}
